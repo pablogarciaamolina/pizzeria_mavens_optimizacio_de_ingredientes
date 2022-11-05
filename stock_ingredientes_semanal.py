@@ -14,11 +14,10 @@ IT DEPENDS ON THE INGREDIENT REFERENCED IN pizza_types.csv.
 import pandas as pd
 from maven_classes import Pizza, Order
 import os
-import time
 
 DF_ORDER_DETAILS = pd.read_csv('order_details.csv')
 DF_ORDERS = pd.read_csv('orders.csv')
-DF_PIZZA_TYPES = pd.read_csv('pizza_types.csv', encoding='latin')
+DF_PIZZA_TYPES = pd.read_csv('pizza_types.csv')
 DF_PIZZAS = pd.read_csv('pizzas.csv')
 
 SIZE_MULTIPLIER = {'S': 1, 'M': 2, 'L': 3, 'XL': 4, 'XXL': 5}
