@@ -1,6 +1,0 @@
-INFORME DE CALIDAD DE LOS DATOS
-
-- Todos los archivos CSV tienen como separador ','.
-- El fichero pizza_types.csv original incluía un caracter no reconocible en la línea 17, el cual debe ser eliminado para
-el correcto funcionamiento del programa (el caracter precede al fragmento: "...Nduja Salami...").
-- No se enceuntra ningún caracter nulo ni ningún campo vacío.
