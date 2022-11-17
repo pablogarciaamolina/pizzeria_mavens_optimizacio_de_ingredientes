@@ -13,14 +13,16 @@ IT DEPENDS ON THE INGREDIENT REFERENCED IN pizza_types.csv.
 
 import pandas as pd
 from maven_classes import Pizza, Order
+from format_csv_as_txt import format_csv
 import os
 
 os.system('cls')
-
-DF_ORDER_DETAILS = pd.read_csv('maven_datasets/order_details.csv')
-DF_ORDERS = pd.read_csv('maven_datasets/orders.csv')
-DF_PIZZA_TYPES = pd.read_csv('maven_datasets/pizza_types.csv')
-DF_PIZZAS = pd.read_csv('maven_datasets/pizzas.csv')
+format_csv('../maven_datasets/unformatted_order_details.csv', sep=';')
+format_csv('../maven_datasets/unformatted_orders.csv', sep=';')
+DF_ORDER_DETAILS = pd.read_csv('../maven_datasets/order_details.csv')
+DF_ORDERS = pd.read_csv('../maven_datasets/orders.csv')
+DF_PIZZA_TYPES = pd.read_csv('../maven_datasets/pizza_types.csv')
+DF_PIZZAS = pd.read_csv('../maven_datasets/pizzas.csv')
 
 SIZE_MULTIPLIER = {'S': 1, 'M': 2, 'L': 3, 'XL': 4, 'XXL': 5}
 N_SIZES = len(SIZE_MULTIPLIER)
@@ -113,13 +115,13 @@ def _buscar_pizza_id_(id: str, pizzas: list[Pizza]) -> Pizza:
     for p in pizzas:
         if p.id == id: return p
     
-def _get_optimized_ingredients_(pizzas: list[Pizza], orders: list[Order], ingredients: dict) -> dict:
+def _get_optimized_ingredients_(pizzas: list[Pizza], orders: list[Order], ingredients: dict, time_stamp: int = None) -> dict:
     '''
     Obtaining an optimized dict of ingredients based on the time of the year.
     Ingredients for every week of the month
     '''
 
-    time_stamp = int(input('Month of the year for optimization of ingredients (1-12): '))
+    time_stamp = int(input('Month of the year for optimization of ingredients (1-12): ')) if not time_stamp else time_stamp
     for order in orders:
         if int(order.time[0][1]) == time_stamp:
             for p in order.command:
@@ -133,7 +135,7 @@ def _get_optimized_ingredients_(pizzas: list[Pizza], orders: list[Order], ingred
 
     return ingredients
     
-def transform(pizzas: list[Pizza], orders: list[Order]) -> dict:
+def transform(pizzas: list[Pizza], orders: list[Order], time_stamp: int = None) -> dict:
     '''
     Transforming extracted data.
     \nCalculating optimized ingedients list (for weekly consumery)
@@ -141,7 +143,7 @@ def transform(pizzas: list[Pizza], orders: list[Order]) -> dict:
 
     print('·Transforming data...')
     ingredients = _get_ingredients_dict_(pizzas)
-    optimized_ingredients = _get_optimized_ingredients_(pizzas, orders, ingredients)
+    optimized_ingredients = _get_optimized_ingredients_(pizzas, orders, ingredients, time_stamp=time_stamp)
     print('<DONE>')
     
     return optimized_ingredients
@@ -164,12 +166,11 @@ def load(optimized: dict, file_name: str='weekly_optimezed_ingredients.csv'):
 def main(clear: bool=True):
     if clear: clear()
     pizzas, orders = extract()
-    optimized_ingredients = transform(pizzas, orders)
+    optimized_ingredients = transform(pizzas, orders, time_stamp=None)
+    print(optimized_ingredients)
     load(optimized_ingredients)
 
 
 if __name__ == '__main__':
 
     main(clear=False)
-
-    
