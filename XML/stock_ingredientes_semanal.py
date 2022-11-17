@@ -17,12 +17,12 @@ from format_csv_as_txt import format_csv
 import os
 
 os.system('cls')
-format_csv('maven_datasets/unformatted_order_details.csv', sep=';')
-format_csv('maven_datasets/unformatted_orders.csv', sep=';')
-DF_ORDER_DETAILS = pd.read_csv('maven_datasets/order_details.csv')
-DF_ORDERS = pd.read_csv('maven_datasets/orders.csv')
-DF_PIZZA_TYPES = pd.read_csv('maven_datasets/pizza_types.csv')
-DF_PIZZAS = pd.read_csv('maven_datasets/pizzas.csv')
+format_csv('../maven_datasets/unformatted_order_details.csv', sep=';')
+format_csv('../maven_datasets/unformatted_orders.csv', sep=';')
+DF_ORDER_DETAILS = pd.read_csv('../maven_datasets/order_details.csv')
+DF_ORDERS = pd.read_csv('../maven_datasets/orders.csv')
+DF_PIZZA_TYPES = pd.read_csv('../maven_datasets/pizza_types.csv')
+DF_PIZZAS = pd.read_csv('../maven_datasets/pizzas.csv')
 
 SIZE_MULTIPLIER = {'S': 1, 'M': 2, 'L': 3, 'XL': 4, 'XXL': 5}
 N_SIZES = len(SIZE_MULTIPLIER)

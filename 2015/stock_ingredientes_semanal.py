@@ -2,7 +2,7 @@
 Pizzerias Maven
 ---------------
 Obtaining optimized list of ingredients to buy weekly.
-Based on year's 2015 data.
+Based on year's 2016 data.
 
 NOTE: Quantity values of the obtained .csv file with the optimized ingredients for each week represent the ratio of
 units relative to the ingredient used in the making of every pizza. For example, if the ingredient "Tomatoes" described
@@ -15,10 +15,12 @@ import pandas as pd
 from maven_classes import Pizza, Order
 import os
 
-DF_ORDER_DETAILS = pd.read_csv('order_details.csv')
-DF_ORDERS = pd.read_csv('orders.csv')
-DF_PIZZA_TYPES = pd.read_csv('pizza_types.csv')
-DF_PIZZAS = pd.read_csv('pizzas.csv')
+os.system('cls')
+
+DF_ORDER_DETAILS = pd.read_csv('../maven_datasets/order_details.csv')
+DF_ORDERS = pd.read_csv('../maven_datasets/orders.csv')
+DF_PIZZA_TYPES = pd.read_csv('../maven_datasets/pizza_types.csv')
+DF_PIZZAS = pd.read_csv('../maven_datasets/pizzas.csv')
 
 SIZE_MULTIPLIER = {'S': 1, 'M': 2, 'L': 3, 'XL': 4, 'XXL': 5}
 N_SIZES = len(SIZE_MULTIPLIER)
@@ -56,15 +58,17 @@ def _get_orders_() -> list[Order]:
         orders.append(Order(int(line['order_id']), time=(line['date'].split('/'), line['time'])))
     
     # Extracting data from order_details.csv
-    orders_dict = {i: [] for i in range(1, len(orders) + 1)}
+    orders_dict = {o.id: [] for o in orders}
     for line in DF_ORDER_DETAILS.iloc():
         id, count = line['pizza_id'], line['quantity']
         already_in = False
-        for p in orders_dict[int(line['order_id'])]:
-            if p[0] == id:
-                already_in = True
-                p[1] += count
-        if not already_in: orders_dict[int(line['order_id'])].append([id, count])
+        hash = int(line['order_id'])
+        if hash in orders_dict:
+            for p in orders_dict[hash]:
+                if p[0] == id:
+                    already_in = True
+                    p[1] += count
+            if not already_in: orders_dict[hash].append([id, count])
     for order in orders:
         order: Order
         order._set_command_(orders_dict[order.id])
@@ -157,11 +161,15 @@ def load(optimized: dict, file_name: str='weekly_optimezed_ingredients.csv'):
     print('<DONE>')
 
 
-if __name__ == '__main__':
-
-    clear()
+def main(clear: bool=True):
+    if clear: clear()
     pizzas, orders = extract()
     optimized_ingredients = transform(pizzas, orders)
     load(optimized_ingredients)
+
+
+if __name__ == '__main__':
+
+    main(clear=False)
 
     
